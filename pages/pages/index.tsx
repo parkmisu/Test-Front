@@ -1,5 +1,6 @@
 import { useState, useEffect, ChangeEvent } from 'react';
 import axios from 'axios';
+import styled from 'styled-components';
 
 //ToDo 항목의 타입을 정의
 interface Todo {
@@ -81,6 +82,15 @@ const TodoApp = () => {
     localStorage.setItem('todos', JSON.stringify(updatedTodos));
   };
 
+   //할 일 완료 처리하는 함수
+   const toggleTodoCompletion = (id: number) => {
+    const updatedTodos = todos.map(todo =>
+      todo.id === id ? { ...todo, completed: !todo.completed } : todo
+    );
+    setTodos(updatedTodos);
+    localStorage.setItem('todos', JSON.stringify(updatedTodos));
+  };
+
   return (
     <div>
       <h1>To-Do List</h1>
@@ -93,15 +103,17 @@ const TodoApp = () => {
         <button onClick={addTodo}>추가</button>
       <div>
         {todos.map((todo) => (
-          <div 
+          <TodoItem
             key={todo.id}
+            completed={todo.completed}
+            onClick={() => toggleTodoCompletion(todo.id)}
           >
             {todo.title}
             <button onClick={(e) => {
               e.stopPropagation();
               deleteTodo(todo.id);
             }}>삭제</button>
-          </div>
+          </TodoItem>
         ))}
       </div>
     </div>
@@ -109,3 +121,12 @@ const TodoApp = () => {
 };
 
 export default TodoApp;
+
+const TodoItem = styled.li<{ completed: boolean }>`
+  cursor: pointer;
+
+  ${({ completed }) => completed && `
+    text-decoration: line-through;
+    background-color:rgb(220, 220, 220);
+  `}
+`;
