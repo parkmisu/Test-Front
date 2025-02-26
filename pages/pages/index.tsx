@@ -74,6 +74,13 @@ const TodoApp = () => {
     setNewTodo(e.target.value);
   };
 
+  //할 일 삭제하는 함수
+   const deleteTodo = (id: number) => {
+    const updatedTodos = todos.filter(todo => todo.id !== id);
+    setTodos(updatedTodos);
+    localStorage.setItem('todos', JSON.stringify(updatedTodos));
+  };
+
   return (
     <div>
       <h1>To-Do List</h1>
@@ -90,6 +97,10 @@ const TodoApp = () => {
             key={todo.id}
           >
             {todo.title}
+            <button onClick={(e) => {
+              e.stopPropagation();
+              deleteTodo(todo.id);
+            }}>삭제</button>
           </div>
         ))}
       </div>
