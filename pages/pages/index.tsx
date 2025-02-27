@@ -92,16 +92,18 @@ const TodoApp = () => {
   };
 
   return (
-    <div>
-      <h1>To-Do List</h1>
-      <input
+    <Container>
+      <h1>박미수의 To-Do List</h1>
+      <InputWrapper>
+        <TodoInput
           type="text"
           value={newTodo}
           onChange={handleInputChange}
           placeholder="새 할 일을 입력하세요"
         />
-        <button onClick={addTodo}>추가</button>
-      <div>
+        <AddButton onClick={addTodo}>추가</AddButton>
+      </InputWrapper>
+      <TodoList>
         {todos.map((todo) => (
           <TodoItem
             key={todo.id}
@@ -109,24 +111,87 @@ const TodoApp = () => {
             onClick={() => toggleTodoCompletion(todo.id)}
           >
             {todo.title}
-            <button onClick={(e) => {
+            <DeleteButton onClick={(e) => {
               e.stopPropagation();
               deleteTodo(todo.id);
-            }}>삭제</button>
+            }}>삭제</DeleteButton>
           </TodoItem>
         ))}
-      </div>
-    </div>
+      </TodoList>
+    </Container>
   );
 };
 
 export default TodoApp;
 
+//컴포넌트 스타일 정의
 const TodoItem = styled.li<{ completed: boolean }>`
   cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: #f9f9f9;
+  margin: 5px 0;
+  border-radius: 4px;
 
   ${({ completed }) => completed && `
     text-decoration: line-through;
     background-color:rgb(220, 220, 220);
   `}
+`;
+
+const Container = styled.div`
+  max-width: 600px;
+  margin: 50px auto;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+`;
+
+const InputWrapper = styled.div`
+  display: flex;
+  margin-bottom: 20px;
+`;
+
+const TodoInput = styled.input`
+  padding: 10px;
+  flex: 1;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-right: 10px;
+`;
+
+const AddButton = styled.button`
+  padding: 10px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #45a049;
+  }
+`;
+
+const TodoList = styled.ul`
+  list-style-type: none;
+  padding: 0;
+`;
+
+const DeleteButton = styled.button`
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 5px 10px;
+  font-size: 14px;
+
+  &:hover {
+    background-color: #ff1a1a;
+  }
 `;
